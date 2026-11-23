@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import io
 import shutil
 import subprocess
 import tempfile
 import warnings
 from dataclasses import dataclass
 from pathlib import Path
+from typing import BinaryIO
 
 import numpy as np
 from scipy.io import wavfile
@@ -39,10 +41,12 @@ def samples_to_float(samples: np.ndarray) -> np.ndarray:
     return result
 
 
-def read_wav(path: str | Path) -> AudioFile:
+def read_wav(source: str | Path | BinaryIO) -> AudioFile:
+    """Lit un WAV depuis un chemin ou un flux binaire (fichier importé dans l'interface)."""
+    target = str(source) if isinstance(source, (str, Path)) else source
     with warnings.catch_warnings(record=True) as caught:
         warnings.simplefilter("always", WavFileWarning)
-        sample_rate, samples = wavfile.read(str(path))
+        sample_rate, samples = wavfile.read(target)
     if sample_rate <= 0:
         raise ValueError("La fréquence d'échantillonnage du fichier est invalide.")
     if samples.ndim not in (1, 2):
@@ -99,6 +103,29 @@ def _validate_export_samples(samples: np.ndarray) -> None:
             f"Le signal dépasse le niveau maximal (crête = {peak:.3f}). "
             "Réduisez les gains avant l'export ; aucune normalisation automatique n'est appliquée."
         )
+
+
+def wav_bytes_for_playback(samples: np.ndarray, sample_rate: int) -> bytes:
+    """Encode un signal en WAV PCM 16 bits pour l'écoute, SANS normalisation.
+
+    Le lecteur de Streamlit normalise automatiquement les tableaux NumPy, ce qui
+    masquerait les différences de niveau entre l'original et les versions
+    égalisées. On fournit donc directement les octets WAV, au niveau réel.
+    """
+    _validate_export_samples(samples)
+    pcm = np.rint(samples * 32_767).astype(np.int16)
+    buffer = io.BytesIO()
+    wavfile.write(buffer, sample_rate, pcm)
+    return buffer.getvalue()
+
+
+def export_audio_bytes(samples: np.ndarray, sample_rate: int, output_format: str) -> bytes:
+    """Variante de `export_audio` qui renvoie le contenu du fichier (téléchargement)."""
+    with tempfile.TemporaryDirectory(prefix="egaliseur_") as temporary_directory:
+        target = export_audio(
+            samples, sample_rate, Path(temporary_directory) / "mix", output_format
+        )
+        return target.read_bytes()
 
 
 def _write_pcm32_wav(path: Path, samples: np.ndarray, sample_rate: int) -> None:

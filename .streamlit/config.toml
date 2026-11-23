@@ -1,0 +1,29 @@
+# Thème clair : blanc, bleu électrique et or.
+[theme]
+base = "light"
+primaryColor = "#1f5bff"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f2f5fd"
+textColor = "#0b1a33"
+linkColor = "#1f5bff"
+borderColor = "#dfe6f3"
+showWidgetBorder = true
+baseRadius = "10px"
+font = "DM Sans:https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap, sans-serif"
+headingFont = "DM Sans:https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap, sans-serif"
+chartCategoricalColors = ["#1f5bff", "#d39b1e", "#7c5cff", "#12a67a"]
+
+# Barre latérale bleu électrique, texte blanc, page active en or.
+[theme.sidebar]
+backgroundColor = "#1640e0"
+secondaryBackgroundColor = "#2a54ef"
+textColor = "#ffffff"
+primaryColor = "#f2c14e"
+borderColor = "#4069f2"
+linkColor = "#ffe29a"
+
+[client]
+toolbarMode = "minimal"
+
+[browser]
+gatherUsageStats = false

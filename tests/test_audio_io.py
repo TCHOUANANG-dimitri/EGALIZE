@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 from scipy.io import wavfile
 
-from audio_io import export_audio, extract_segment, read_wav, spectrum_db
+from egaliseur.audio_io import export_audio, extract_segment, read_wav, spectrum_db
 
 
 class AudioIoTests(unittest.TestCase):

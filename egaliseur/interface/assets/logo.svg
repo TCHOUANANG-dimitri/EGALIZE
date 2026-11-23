@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="178" height="40" viewBox="0 0 178 40">
+  <rect x="1" y="2" width="36" height="36" rx="10" fill="#ffffff" fill-opacity="0.16" stroke="#ffffff" stroke-opacity="0.4"/>
+  <path d="M7 21h5l3-10 6 19 4-14 3 8h4" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="47" y="28.5" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="22" font-weight="800" letter-spacing="1.6" fill="#ffffff">EGAL<tspan fill="#f2c14e">IZE</tspan></text>
+</svg>
