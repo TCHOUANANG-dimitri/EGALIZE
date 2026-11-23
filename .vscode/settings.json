@@ -1,0 +1,6 @@
+{
+    // Ouvre toujours les notebooks dans l'éditeur Jupyter (et non en texte JSON).
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter-notebook"
+    }
+}

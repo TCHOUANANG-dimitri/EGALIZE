@@ -171,9 +171,10 @@ def spectrum_figure(
     after_levels_db: np.ndarray | None = None,
     title: str = "Spectre de l'extrait et zones de fréquences",
     height: int = 400,
+    zone_legend: bool = True,
 ) -> go.Figure:
-    figure = _base_figure(title, "Fréquence (Hz, échelle logarithmique)", "Densité spectrale (dB/Hz)", height)
-    _band_zones(figure, low, high, nyquist)
+    figure = _base_figure(title, "Fréquence (Hz)", "Niveau (dB/Hz)", height)
+    _band_zones(figure, low, high, nyquist, with_legend=zone_legend)
     positive = frequencies > 0
     shown = [levels_db[positive]]
     figure.add_trace(
@@ -214,14 +215,11 @@ def band_spectra_figure(
     low: float,
     high: float,
     nyquist: float,
+    title: str = "Spectre de l'original et des trois bandes",
+    height: int = 420,
 ) -> go.Figure:
-    """Spectre de chaque bande séparée : montre la pente réelle des filtres."""
-    figure = _base_figure(
-        "Spectre de chaque bande séparée (avant gains)",
-        "Fréquence (Hz, échelle logarithmique)",
-        "Densité spectrale (dB/Hz)",
-        380,
-    )
+    """Spectre de l'original et de chaque bande séparée, en couleurs."""
+    figure = _base_figure(title, "Fréquence (Hz)", "Niveau (dB/Hz)", height)
     _band_zones(figure, low, high, nyquist, with_legend=False)
     positive = frequencies > 0
     figure.add_trace(
@@ -392,3 +390,47 @@ def _envelope_traces(
             hoverinfo="skip",
         )
     )
+
+
+def band_detail_figure(
+    frequencies: np.ndarray,
+    before_db: np.ndarray,
+    after_db: np.ndarray,
+    name: str,
+    low: float,
+    high: float,
+    nyquist: float,
+) -> go.Figure:
+    """Spectre d'une bande avant et après son gain."""
+    color = BAND_COLORS[name]
+    figure = _base_figure(f"Spectre — {BAND_LABELS[name]}", "Fréquence (Hz)", "Niveau (dB/Hz)", 340)
+    _band_zones(figure, low, high, nyquist, with_legend=False)
+    positive = frequencies > 0
+    for levels, label, style in (
+        (before_db, "Avant gain", {"color": _rgba(color, 0.45), "width": 1.2, "dash": "dot"}),
+        (after_db, "Après gain", {"color": color, "width": 1.6}),
+    ):
+        figure.add_trace(go.Scatter(x=frequencies[positive], y=levels[positive], mode="lines", name=label, line=style))
+    _log_frequency_axis(figure, nyquist)
+    top = float(max(np.max(before_db[positive]), np.max(after_db[positive])))
+    figure.update_yaxes(range=[top - 100, top + 6])
+    return figure
+
+
+def compare_waveform_figure(
+    before: tuple[np.ndarray, np.ndarray, np.ndarray],
+    after: tuple[np.ndarray, np.ndarray, np.ndarray],
+    title: str,
+    labels: tuple[str, str],
+    color: str = BLUE,
+) -> go.Figure:
+    """Formes d'onde superposées (enveloppes min/max) avant et après."""
+    figure = _base_figure(title, "Temps (s)", "Amplitude", 340)
+    _envelope_traces(figure, *before, "#9aa6bb", labels[0])
+    _envelope_traces(figure, *after, color, labels[1])
+    for level in (-1, 1):
+        figure.add_hline(y=level, line={"color": DANGER, "width": 1, "dash": "dash"}, opacity=0.6)
+    peak = max(1.0, *(float(np.max(np.abs(values))) for values in (*before[1:], *after[1:])))
+    figure.update_yaxes(range=[-peak * 1.08, peak * 1.08])
+    figure.update_layout(hovermode=False)
+    return figure
