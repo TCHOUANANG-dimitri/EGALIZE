@@ -1,5 +1,5 @@
-"""Filtres de l'égaliseur, construits uniquement à partir du passe-bas étudié
-dans notebooks/01_passe_bas.ipynb : le lissage exponentiel.
+"""Filtres de l'égaliseur, construits uniquement à partir d'un passe-bas élémentaire :
+le lissage exponentiel.
 
     graves  = passe_bas(x, coupure basse)
     médiums = passe_bas(x, coupure haute) - passe_bas(x, coupure basse)

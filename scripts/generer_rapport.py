@@ -416,6 +416,8 @@ para("Le traitement est accessible dans l'application développée pour le proje
      "« Recombinaison » (comparaison avec l'original, écoute et export). Les figures présentées dans ce "
      "rapport sont des captures de cette application. Les versions égalisées remises sont produites par le "
      "script scripts/generer_versions.py, qui utilise exactement les mêmes filtres que l'application.")
+para("L'application est publiée en ligne et utilisable depuis un navigateur, sans installation, à l'adresse :")
+lien(doc.add_paragraph(), "https://egalize.streamlit.app/")
 
 # ---------------------------------------------------------------------------
 # 3. Description des données

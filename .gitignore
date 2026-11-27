@@ -8,3 +8,6 @@ livrable/
 
 # Fichiers temporaires de Word
 ~$*
+
+# Notebooks d'étude des filtres : conservés en local, non publiés
+notebooks/

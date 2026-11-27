@@ -1,7 +1,9 @@
-# EGALIZE — égaliseur audio trois bandes (Projet 2)
+# Conception d'un égaliseur audio numérique (Projet 2)
 
 Application Streamlit : importer un fichier WAV, séparer ses graves, médiums et
 aigus, régler le gain de chaque bande, puis recombiner et écouter le résultat.
+
+**Application en ligne : https://egalize.streamlit.app/**
 
 ## Lancement
 
@@ -25,9 +27,8 @@ Les réglages sont conservés quand on change de page.
 
 ## Les filtres
 
-Les bandes sont obtenues dans `egaliseur/filtres.py` avec le passe-bas étudié
-dans `notebooks/01_passe_bas.ipynb` (lissage exponentiel), appliqué aller puis
-retour pour supprimer le retard :
+Les bandes sont obtenues dans `egaliseur/filtres.py` avec un passe-bas par
+lissage exponentiel, appliqué aller puis retour pour supprimer le retard :
 
 ```
 graves  = passe_bas(x, coupure basse)
@@ -59,7 +60,6 @@ faible, les bandes se chevauchent près des coupures.
 │   ├── signal_analysis.py mesures (niveaux, coupures)
 │   ├── vues/              pages : fichier, bandes, recombinaison
 │   └── interface/         état partagé, navigation, graphiques, style, logo
-├── notebooks/             études des filtres : 01 passe-bas, 02 passe-haut, 03 passe-bande
 ├── tests/                 tests unitaires
 ├── donnees/originales/    données brutes, jamais modifiées
 ├── donnees/egalisees/     versions exportées
