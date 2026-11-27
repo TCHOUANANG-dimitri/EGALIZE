@@ -24,7 +24,7 @@ from ..pipeline import equalize, split
 from ..signal_analysis import cutoff_options, default_cutoffs, to_dbfs, waveform_envelope
 
 PROJECT_DIR = Path(__file__).resolve().parents[2]
-EXAMPLE_FILE = PROJECT_DIR / "donnees" / "originales" / "Techno_music_001.wav"
+EXAMPLE_FILE = PROJECT_DIR / "donnees" / "originales" / "Techno_music_001_extrait_0-20s.wav"
 MIN_EXCERPT_S, MAX_EXCERPT_S = 10, 30
 CEILING_DBFS = -1.0
 

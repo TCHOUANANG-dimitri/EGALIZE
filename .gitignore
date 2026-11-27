@@ -1,0 +1,10 @@
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Dossier des livrables : copies des fichiers du dépôt, régénéré par scripts/assembler_livrables.py
+livrable/
+
+# Fichiers temporaires de Word
+~$*

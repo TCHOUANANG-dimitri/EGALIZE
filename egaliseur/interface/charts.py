@@ -217,20 +217,22 @@ def band_spectra_figure(
     nyquist: float,
     title: str = "Spectre de l'original et des trois bandes",
     height: int = 420,
+    show_original: bool = True,
 ) -> go.Figure:
-    """Spectre de l'original et de chaque bande séparée, en couleurs."""
+    """Spectre de chaque bande séparée, en couleurs (avec ou sans l'original en gris)."""
     figure = _base_figure(title, "Fréquence (Hz)", "Niveau (dB/Hz)", height)
     _band_zones(figure, low, high, nyquist, with_legend=False)
     positive = frequencies > 0
-    figure.add_trace(
-        go.Scatter(
-            x=frequencies[positive],
-            y=original_db[positive],
-            mode="lines",
-            name="Original",
-            line={"color": _rgba(INK, 0.28), "width": 1},
+    if show_original:
+        figure.add_trace(
+            go.Scatter(
+                x=frequencies[positive],
+                y=original_db[positive],
+                mode="lines",
+                name="Original",
+                line={"color": _rgba(INK, 0.28), "width": 1},
+            )
         )
-    )
     for name in BAND_NAMES:
         figure.add_trace(
             go.Scatter(

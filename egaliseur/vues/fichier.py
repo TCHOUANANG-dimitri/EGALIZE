@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import streamlit as st
 
-from ..dsp_backend import BAND_NAMES
 from ..interface import charts, etat, navigation, ui
 from ..interface.charts import PLOTLY_CONFIG, format_hz
 from ..interface.formatage import fr_duration, fr_int
@@ -53,17 +52,12 @@ def render() -> None:
             args=(key, options),
         )
         low, high = (float(value) for value in etat.current_cutoffs(track))
-        try:
-            bands = etat.bands(track, excerpt)
-        except (NotImplementedError, ValueError, RuntimeError) as error:
-            st.error(f"Séparation impossible : {error}")
-            return
-        bands_db = {name: etat.analyse(track, excerpt, f"bande:{name}", bands[name])["levels"] for name in BAND_NAMES}
         st.plotly_chart(
-            charts.band_spectra_figure(original["frequencies"], original["levels"], bands_db, low, high, track.nyquist),
+            charts.spectrum_figure(original["frequencies"], original["levels"], low, high, track.nyquist,
+                                   title="Spectre du signal"),
             config=PLOTLY_CONFIG,
             theme=None,
-            key="bands_chart",
+            key="spectrum_chart",
         )
     navigation.nav_footer("fichier")
 

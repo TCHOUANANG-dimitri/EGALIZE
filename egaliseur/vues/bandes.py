@@ -12,6 +12,9 @@ from ..pipeline import BAND_LABELS
 from ..signal_analysis import GAIN_LIMIT_DB
 
 
+TOUTES = "toutes"   # option du sélecteur : les trois bandes ensemble
+
+
 def render() -> None:
     track = navigation.require_track()
     if track is None:
@@ -29,8 +32,8 @@ def render() -> None:
     key = etat.widget_key("band")
     st.segmented_control(
         "Bande",
-        BAND_NAMES,
-        format_func=lambda n: f"{BAND_LABELS[n]}   {format_gain(gains[n])}",
+        [*BAND_NAMES, TOUTES],
+        format_func=lambda n: "Les trois" if n == TOUTES else f"{BAND_LABELS[n]}   {format_gain(gains[n])}",
         default=st.session_state.band,
         key=key,
         on_change=etat.sync,
@@ -42,6 +45,11 @@ def render() -> None:
     name = st.session_state.band
     low, high = (float(value) for value in etat.current_cutoffs(track))
     ranges = {"bass": f"< {format_hz(low)}", "mid": f"{format_hz(low)} – {format_hz(high)}", "treble": f"> {format_hz(high)}"}
+
+    if name == TOUTES:
+        _render_toutes(track, excerpt, raw, ranges, low, high)
+        navigation.nav_footer("bandes")
+        return
 
     before = etat.analyse(track, excerpt, f"bande:{name}", raw[name])
     after = etat.analyse(track, excerpt, f"bande:{name}:gain", processed[name], gains[name])
@@ -87,3 +95,24 @@ def render() -> None:
                 key="detail_waveform",
             )
     navigation.nav_footer("bandes")
+
+
+def _render_toutes(track, excerpt, raw, ranges, low, high) -> None:
+    """Les trois bandes séparées (avant gain), sur un même graphique, sans l'original."""
+    analyses = {name: etat.analyse(track, excerpt, f"bande:{name}", raw[name]) for name in BAND_NAMES}
+    first = analyses[BAND_NAMES[0]]
+    with st.container(key="card_toutes"):
+        st.plotly_chart(
+            charts.band_spectra_figure(
+                first["frequencies"], first["levels"], {n: a["levels"] for n, a in analyses.items()},
+                low, high, track.nyquist, title="Les trois bandes séparées", show_original=False,
+            ),
+            config=PLOTLY_CONFIG,
+            theme=None,
+            key="all_bands_spectrum",
+        )
+        players = st.columns(3, gap="medium")
+        for column, name in zip(players, BAND_NAMES):
+            with column:
+                st.html(ui.label(f"{BAND_LABELS[name]} ({ranges[name]})"))
+                st.audio(analyses[name]["wav"], format="audio/wav")

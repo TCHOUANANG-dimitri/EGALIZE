@@ -1,0 +1,5 @@
+﻿Version;Gain graves (dB);Gain médiums (dB);Gain aigus (dB);Crête avant correction (dBFS);Abaissement (dB);Crête finale (dBFS);Valeur efficace (dBFS);Variation graves (dB);Variation médiums (dB);Variation aigus (dB);Part graves (%);Part médiums (%);Part aigus (%);Fichier
+original;0;0;0;-4.94;0.0;-4.94;-21.61;0.0;0.0;0.0;88.4;8.2;3.4;Techno_music_001_extrait_0-20s.wav
+version_1;6;0;-1;-2.76;0.0;-2.76;-16.16;5.8;1.5;-0.48;95.8;3.3;0.9;Techno_extrait_version_1_G+6_M+0_A-1.wav
+version_2;0;8;2;1.27;-2.27;-1.0;-22.08;-1.69;4.46;3.05;66.8;25.5;7.7;Techno_extrait_version_2_G+0_M+8_A+2.wav
+version_3;2;-1;10;-2.04;0.0;-2.04;-19.52;1.89;0.85;6.58;84.3;6.1;9.6;Techno_extrait_version_3_G+2_M-1_A+10.wav
